@@ -38,9 +38,13 @@
         <p class="gate-sub">на тебя оформлен пропуск</p>
         <button class="lanyard" id="open" type="button" aria-label="Открыть приглашение">
           <span class="strap"></span>
-          <span class="badge"><b>ALL<br>ACCESS</b><i>${esc(PARTY.age)}</i></span>
+          <span class="badge-wrap">
+            <span class="tap-ring"></span><span class="tap-ring r2"></span>
+            <span class="badge"><b>ALL<br>ACCESS</b><i>${esc(PARTY.age)}</i></span>
+            <span class="tap-finger" aria-hidden="true">👆</span>
+          </span>
         </button>
-        <p class="mono gate-hint">нажми на пропуск</p>
+        <button class="gate-hint" type="button" id="open-hint">Тапни по пропуску</button>
       </section>`;
   }
 
@@ -394,7 +398,10 @@
     const stage = createStage($('#stage'));
     const nameEl = $('#gate-name');
     scramble(nameEl, nameEl.textContent);
-    $('#open').addEventListener('click', () => openShow(stage), { once: true });
+    let opened = false;
+    const open = () => { if (opened) return; opened = true; openShow(stage); };
+    $('#open').addEventListener('click', open);
+    $('#open-hint').addEventListener('click', open);
   }
 
   init();
