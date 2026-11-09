@@ -151,7 +151,7 @@
           <a class="btn primary" id="rsvp" href="#">Я в деле 🤘</a>
           <div class="btn-row">
             <a class="btn" href="${esc(PARTY.mapUrl)}" target="_blank" rel="noopener">Маршрут</a>
-            <a class="btn" href="${ROOT}party.ics" download="dr-${esc(PARTY.age)}.ics">В календарь</a>
+            <a class="btn" id="cal" href="${ROOT}party.ics">В календарь</a>
           </div>
         </div>
       </section>
@@ -367,6 +367,30 @@
     });
   }
 
+  const IS_APPLE = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document
+    || /iPhone|iPad|iPod/.test(navigator.userAgent);
+
+  function googleCalendarUrl() {
+    const stamp = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: `${PARTY.host} ${PARTY.age} · Live`,
+      dates: `${stamp(START)}/${stamp(END)}`,
+      location: [PARTY.place, PARTY.address].filter(Boolean).join(', '),
+      details: `Пропуск: ${location.href}`,
+    });
+    return `https://calendar.google.com/calendar/render?${params}`;
+  }
+
+  // iOS opens a served text/calendar file as an "Add to Calendar" sheet;
+  // everyone else gets a prefilled Google Calendar event.
+  function bindCalendar(link) {
+    if (IS_APPLE) return;
+    link.href = googleCalendarUrl();
+    link.target = '_blank';
+    link.rel = 'noopener';
+  }
+
   function revealOnScroll() {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
@@ -389,6 +413,7 @@
     bindTilt($('#pass'));
     startCountdown($('#count'));
     bindRsvp($('#rsvp'), stage);
+    bindCalendar($('#cal'));
     setTimeout(revealOnScroll, 250);
     setTimeout(() => $('#gate').remove(), 1000);
   }
