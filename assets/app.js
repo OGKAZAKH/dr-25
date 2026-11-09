@@ -137,7 +137,7 @@
           ${PARTY.hostPhoto ? `<img src="${ROOT}p/host.jpg" alt="${esc(PARTY.host)}" style="object-position:${esc(PARTY.hostPos || '50% 50%')}">` : ''}
           <div class="headliner-text"><small class="mono">Хедлайнер · ${esc(PARTY.age)} лет</small><b>${esc(PARTY.host)}</b><span>Величайший художник по свету</span></div>
         </div>
-        <p class="lineup-head">Величайшие люди <em>Тюмени</em></p>
+        <p class="lineup-head">Величайшие люди <em>вечера</em></p>
         <p class="lineup-sub">${DATA.guests.length} имён. Ни одного случайного.</p>
         <ul class="lineup">${DATA.guests.map(actHtml).join('')}</ul>
       </section>`;
